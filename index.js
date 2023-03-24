@@ -1,63 +1,36 @@
 
-    // handle form submission
-    $('form').submit(function(event) {
-      event.preventDefault();
-  
-      // validate form inputs
-      var name = $('#name').val().trim();
-      var email = $('#email').val().trim();
-      var message = $('#message').val().trim();
-  
-      if (name === '') {
-        $('#name-error').show();
-        return;
-      }
-  
-      if (email === '') {
-        $('#email-error').show();
-        return;
-      }
-  
-      if (!isValidEmail(email)) {
-        $('#email-error').show();
-        return;
-      }
-  
-      if (message === '') {
-        $('#message-error').show();
-        return;
-      }
-  
-      // hide error messages
-      $('#name-error').hide();
-      $('#email-error').hide();
-      $('#message-error').hide();
-  
-      // disable submit button and show loader
-      $('button[type="submit"]').prop('disabled', true);
-      $('#loader').show();
-  
-      // submit data to API
-      $.ajax({
-        url: 'https://jsonplaceholder.typicode.com/posts',
-        method: 'POST',
-        data: {
-          name: name,
-          email: email,
-          message: message
-        }
-      }).done(function(response) {
-        // clear form inputs and show success message
-        $('form')[0].reset();
-        $('#data').prepend('<div class="alert alert-success">Data submitted successfully.</div>');
-      }).fail(function(xhr, status, error) {
-        // show error message
-        $('#error').html('Error: ' + error).show();
-      }).always(function() {
-        // enable submit button and hide loader
-        $('button[type="submit"]').prop()
-        
-      }
-    )}  
-}
     
+
+
+
+      $(document).ready(function() {
+        // Get the list of hotels from the API
+        $.getJSON("https://api.example.com/hotels", function(data) {
+          var hotels = "";
+          $.each(data, function(key, value) {
+            hotels += "<div class='card'><div class='card-body'><h4 class='card-title'>" + value.name + "</h4><p class='card-text'>" + value.address + "</p><p class='card-text'>Stars: " + value.stars + "</p></div></div>";
+          });
+          $("#hotels").html(hotels);
+        });
+
+        // Handle form submission
+        $("#hotel-form").submit(function(event) {
+          event.preventDefault();
+          var form = $(this);
+          var formData = form.serialize();
+          $.ajax({
+            type: "POST",
+            url: "https://api.example.com/hotels",
+            data: formData,
+            success: function() {
+              alert("Hotel added successfully!");
+              form[0].reset();
+            },
+            error: function() {
+              alert("An error occurred while adding the hotel.");
+            }
+          });
+        });
+      });
+    
+ 
